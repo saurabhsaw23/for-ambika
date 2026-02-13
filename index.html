@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Ambika ❤️</title>
+    <style>
+        /* --- Import Elegant Fonts --- */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Poppins:wght@300;400;600&display=swap');
+
+        :root {
+            --primary: #c9184a; /* Deep Rose */
+            --secondary: #ffb3c1; /* Soft Pink */
+            --bg-color: #fff0f3; /* Blush Background */
+            --text-main: #590d22;
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.8);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #fff0f3 0%, #ffe3e3 100%);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            color: var(--text-main);
+        }
+
+        /* --- Floating Background Blobs --- */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: -1;
+            opacity: 0.6;
+        }
+        .blob-1 { width: 300px; height: 300px; background: #ffccd5; top: -50px; left: -50px; }
+        .blob-2 { width: 400px; height: 400px; background: #fff0f3; bottom: -100px; right: -100px; }
+
+        /* --- Glassmorphism Card --- */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(255, 182, 193, 0.3);
+            text-align: center;
+            width: 320px;
+            /* Important: Keep the card huge enough for the button to run around */
+            height: 500px; 
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        p {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .hero-gif {
+            width: 100%;
+            max-width: 200px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        /* --- Buttons --- */
+        .btn-group {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            position: relative; /* Container for buttons */
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .btn-yes {
+            background: var(--primary);
+            color: white;
+            z-index: 10; /* Make sure Yes is always clickable */
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.05);
+            background: #a4163f;
+            box-shadow: 0 10px 20px rgba(201, 24, 74, 0.3);
+        }
+
+        #noBtn {
+            background: white;
+            color: var(--text-main);
+            border: 1px solid #ffccd5;
+            z-index: 5;
+            /* Initially it sits normally in the flexbox. JS will make it absolute */
+            position: relative; 
+        }
+
+        /* --- Animations --- */
+        .heart, .confetti {
+            position: fixed;
+            top: -10vh;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .heart {
+            font-size: 20px;
+            animation: fall linear forwards;
+        }
+
+        .confetti {
+            width: 8px;
+            height: 8px;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="glass-card" id="mainCard">
+        <h1>Ambika... ❤️</h1>
+        <p>Will you be my Valentine?</p>
+        
+        <img src="https://media.giphy.com/media/v1.Y2lkPTZjMDliOTUybWw1aGZ3b3AyZ3VkbzF3aHk4eWJqOG11bWw1aGZ3b3AyZ3VkbzF3aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" 
+             alt="Cute Bear" class="hero-gif">
+
+        <div class="btn-group">
+            <button class="btn-yes" onclick="yesClick()">YES, Obviously!</button>
+            <button id="noBtn">No</button>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById("noBtn");
+        const card = document.querySelector(".glass-card");
+
+        // --- THE FIX: Make the button run away logic robust ---
+        if (noBtn && card) {
+            
+            // Function to move the button
+            const moveButton = () => {
+                // Calculate random positions within the card's width and height
+                // We subtract button size (approx 100px width, 50px height) to keep it inside
+                const x = Math.random() * (card.clientWidth - noBtn.offsetWidth);
+                const y = Math.random() * (card.clientHeight - noBtn.offsetHeight);
+
+                noBtn.style.position = "absolute"; // Switch to absolute positioning
+                noBtn.style.left = `${x}px`;
+                noBtn.style.top = `${y}px`;
+            };
+
+            // Event Listeners for both Desktop (Mouse) and Mobile (Touch)
+            noBtn.addEventListener('mouseover', moveButton);
+            noBtn.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent actual click
+                moveButton();
+            });
+            noBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault(); // Prevent touch click
+                moveButton();
+            });
+        }
+
+        // --- Visual Effects ---
+        function createHearts() {
+            const interval = setInterval(() => {
+                const heart = document.createElement("div");
+                heart.className = "heart";
+                heart.innerHTML = "❤️";
+                heart.style.left = Math.random() * 100 + "vw";
+                heart.style.animationDuration = Math.random() * 3 + 2 + "s";
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 5000);
+            }, 300);
+        }
+
+        function confettiBlast() {
+            const colors = ["#ff4d6d", "#ffccd5", "#fff0f3", "#ffd700"];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement("div");
+                confetti.className = "confetti";
+                confetti.style.left = Math.random() * 100 + "vw";
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = Math.random() * 2 + 2 + "s";
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 4000);
+            }
+        }
+
+        // --- Success Logic ---
+        const gifs = [
+            "https://media4.giphy.com/media/v1.Y2lkPTZjMDliOTUydm00czcyM2p4bWcwbndiYmc0ZHMyanloOG5tcjZ5MHRzZHphYjlzdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/jrzd4gmGwYmJPh6FaX/giphy.gif",
+            "https://media4.giphy.com/media/v1.Y2lkPTZjMDliOTUycmxib2o2aWJja2c1bXI0YmhzOWo4dXRyNXAwMzJ3Y2R5ZzdiaTZ3biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/rjO1XKQMaGzmLferQL/giphy.gif",
+            "https://media4.giphy.com/media/v1.Y2lkPTZjMDliOTUyOWlkb3F2eWExdzhkb2s0NXdvYXdkOXAzZnBxMTd3MTg0dDQydTNteCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/h0k035l4xbN5UevEdB/giphy.gif"
+        ];
+        
+        let currentIndex = 0;
+        let autoSlider;
+
+        function startGifShow() {
+            const gifElement = document.getElementById("gif");
+            if (!gifElement) return;
+            autoSlider = setInterval(() => {
+                currentIndex = (currentIndex + 1) % gifs.length;
+                gifElement.src = gifs[currentIndex];
+            }, 3000);
+        }
+
+        function changeGifManually() {
+            const gifElement = document.getElementById("gif");
+            if(gifElement) {
+                currentIndex = (currentIndex + 1) % gifs.length;
+                gifElement.src = gifs[currentIndex];
+            }
+        }
+
+        function yesClick() {
+            confettiBlast();
+            createHearts();
+
+            // Clear the card content
+            const cardContent = document.getElementById('mainCard');
+            
+            cardContent.innerHTML = `
+                <h1 style="font-size:28px; margin-bottom:10px;">Yayyyyy Ambika! 💖</h1>
+                <p style="margin-bottom:20px;">I knew you'd say yes! 😉</p>
+
+                <img id="gif" src="${gifs[0]}" class="hero-gif" style="border-radius:15px; box-shadow:0 8px 20px rgba(193, 18, 31, 0.2);">
+
+                <button class="btn-yes" onclick="changeGifManually()" style="margin-top:10px;">
+                    Next GIF ➡️
+                </button>
+            `;
+
+            setTimeout(startGifShow, 500);
+            
+            // Show the letter after 12 seconds
+            setTimeout(showLoveLetter, 12000); 
+        }
+
+        function showLoveLetter() {
+            clearInterval(autoSlider);
+            document.body.innerHTML = `
+            <div style="display:flex; justify-content:center; align-items:center; height:100vh; background:#fff0f3;">
+                <div style="background:#fff; padding:40px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.1); max-width:500px; border-top: 5px solid #c9184a;">
+                    <h1 style="font-family:'Playfair Display'; color:#c9184a; font-size:24px; margin-bottom:20px;">💌 A Tiny Note for You, Goddess!✨👑🛐</h1>
+                    
+                    <p style="font-family:'Poppins', sans-serif; color:#555; font-size:15px; line-height:1.6;">
+                        So... you clicked YES. <br>
+                        Not that I’m surprised 😌.
+                        I already knew you were secretly dying to be with me.  
+                        You probably practiced clicking that button in your head.
+                        <br><br>
+                        But jokes apart... choosing me means choosing laughter, chaos, random silliness, 
+                        and a whole lot of love.
+                        And don’t worry,  
+                        I’ve signed up for this madness forever too.
+                        <br><br>
+                        You chose me today. I’ll keep choosing you every day. 💛
+                    </p>
+                    
+                    <h3 style="font-family:'Playfair Display'; color:#c9184a; margin-top:30px; text-align:right;">– Yours, always ❤️</h3>
+                </div>
+            </div>`;
+        }
+    </script>
+</body>
+</html>
